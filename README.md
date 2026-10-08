@@ -1,4 +1,4 @@
-# A survey project for QREtools
+# A survey workspace for QREtools
 
 Survey instruments, one YAML file each, composed from the questions of a question bank
 and elaborated by QREtools to DDI-Lifecycle 4.0: the flow as control constructs, the
@@ -6,26 +6,26 @@ instrument's own variables, and the bank items it asks.
 
 What QREtools is and how it works: [About QREtools](https://github.com/JHUCities/qretools#readme).
 
-This repository is the template for new projects:
+This repository is the template for new workspaces:
 <https://github.com/JHUCities/qretools-instrument-template>. Start one with
 [Use this template](https://github.com/JHUCities/qretools-instrument-template/generate).
 A question bank on its own, with no instruments, starts from the bank template instead:
 [qretools-bank-template](https://github.com/JHUCities/qretools-bank-template).
 
-## Set up a new project from this template
+## Set up a new workspace from this template
 
-1. **Create your project:** "Use this template" → "Create a new repository". A private
+1. **Create your workspace:** "Use this template" → "Create a new repository". A private
    repository is fine.
 2. **Install the QREtools app** on the new repository if it is private:
    <https://github.com/apps/qretools/installations/new> → choose your account or
    organisation → "Only select repositories" → this one. A public repository can be
    read without it.
-3. **Set your agency:** in `project.yaml`, replace `org.example` with the DDI agency your
+3. **Set your agency:** in `workspace.yaml`, replace `org.example` with the DDI agency your
    instruments are published under (letters, digits and hyphens, in parts joined by
    dots, such as `edu.example.survey-lab`). Do the same in `banks/example/bank.yaml`
    for the bank's questions, or replace that bank with your own.
 4. **Open it** in the QREtools instrument tool: sign in and enter the repository as
-   `owner/name`, or `owner/name/folder` for a project kept in a folder. The bank opens
+   `owner/name`, or `owner/name/folder` for a workspace kept in a folder. The bank opens
    in the [QREtools bank tool](https://bank.qretools.com) as
    `owner/name/banks/example`. The instrument tool is in development and not published
    yet.
@@ -34,7 +34,7 @@ A question bank on its own, with no instruments, starts from the bank template i
 
 | Path | Holds |
 |---|---|
-| `project.yaml` | what the project says about itself: the DDI agency its instruments are published under (`agency:`) |
+| `workspace.yaml` | what the workspace says about itself: the DDI agency its instruments are published under (`agency:`) |
 | `instruments/<name>.yaml` | one instrument each |
 | `banks/<name>/` | a question bank the instruments use, laid out as the [bank template](https://github.com/JHUCities/qretools-bank-template) is |
 
