@@ -25,10 +25,10 @@ A question bank on its own, with no instruments, starts from the bank template i
    dots, such as `edu.example.survey-lab`). Do the same in `banks/example/bank.yaml`
    for the bank's questions, or replace that bank with your own.
 4. **Open it** in the QREtools instrument tool: sign in and enter the repository as
-   `owner/name`, or `owner/name/folder` for a project kept in a folder. The bank opens
-   in the [QREtools bank tool](https://bank.qretools.com) as
-   `owner/name/banks/example`. The instrument tool is in development and not published
-   yet.
+   `owner/name`, or `owner/name/folder` for a project kept in a folder. The instrument
+   tool is in development and not published yet; so is the version of the
+   [QREtools bank tool](https://bank.qretools.com) that opens a bank kept in a folder,
+   such as this one's `banks/example`.
 
 ## Layout
 
