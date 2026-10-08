@@ -22,13 +22,14 @@ A question bank on its own, with no instruments, starts from the bank template i
    read without it.
 3. **Set your agency:** in `workspace.yaml`, replace `org.example` with the DDI agency your
    instruments are published under (letters, digits and hyphens, in parts joined by
-   dots, such as `edu.example.survey-lab`). Do the same in `banks/example/bank.yaml`
-   for the bank's questions, or replace that bank with your own.
-4. **Open it** in the QREtools instrument tool: sign in and enter the repository as
-   `owner/name`, or `owner/name/folder` for a workspace kept in a folder. The bank opens
-   in the [QREtools bank tool](https://bank.qretools.com) as
-   `owner/name/banks/example`. The instrument tool is in development and not published
-   yet.
+   dots, such as `edu.example.survey-lab`).
+4. **Choose your bank:** the example instrument uses the
+   [bank template](https://github.com/JHUCities/qretools-bank-template) at its `v1`
+   tag. Point `uses:` at your own bank instead, in its own repository or in a folder
+   under `banks/` here (see below).
+5. **Open it** in QREtools: sign in and enter the repository as `owner/name`, or
+   `owner/name/folder` for a workspace kept in a folder. The version that opens
+   instruments is in development and not published yet.
 
 ## Layout
 
@@ -36,30 +37,38 @@ A question bank on its own, with no instruments, starts from the bank template i
 |---|---|
 | `workspace.yaml` | what the workspace says about itself: the DDI agency its instruments are published under (`agency:`) |
 | `instruments/<name>.yaml` | one instrument each |
-| `banks/<name>/` | a question bank the instruments use, laid out as the [bank template](https://github.com/JHUCities/qretools-bank-template) is |
+| `banks/<name>/` | optional: a question bank kept here, laid out as the [bank template](https://github.com/JHUCities/qretools-bank-template) is |
 
 Instruments and banks are kept apart: never put an instrument inside a bank's folders.
 A bank belongs in its own folder under `banks/`, or in a repository of its own.
 
 ## The banks an instrument uses
 
-An instrument names each bank it uses under a short alias, by where the bank is from
-the instrument's own folder:
+An instrument names each bank it uses under a short alias, and then names the bank's
+questions with it: `ask: tpl.service_satisfaction`. A bank in a repository of its own is
+named by its repository and a tag, so the instrument always reads the same version of it
+until you change the tag:
 
 ```yaml
 uses:
-  ex: ../banks/example
+  tpl: JHUCities/qretools-bank-template@v1   # owner/name@tag
+  own: your-org/your-bank/banks/main@v2      # owner/name/folder@tag, for a bank in a folder
 ```
 
-and then names the bank's questions with the alias: `ask: ex.service_satisfaction`.
-Only banks in this repository (addresses starting `./` or `../`) are read for now. To
-use a bank kept in its own repository, such as one started from the
-[bank template](https://github.com/JHUCities/qretools-bank-template), copy its files
-into a folder under `banks/` until addresses in other repositories are read.
+A bank kept in this repository is named by where it is from the instrument's own folder:
+
+```yaml
+uses:
+  here: ../banks/example
+```
+
+Only a tag is read, never a branch, so the bank's owners decide what version is
+published: they tag it. A private bank's repository needs the QREtools app installed
+(step 2) for the instrument tool to read it.
 
 ## The example
 
-`instruments/example.yaml` asks the example bank's questions, to copy or delete:
+`instruments/example.yaml` asks the bank template's example questions, to copy or delete:
 
 | Shows | Where |
 |---|---|
@@ -69,9 +78,9 @@ into a folder under `banks/` until addresses in other repositories are read.
 | a check on an answer, with a message naming it | `checks:` with `ensure:`, `severity:` and `message:` |
 | a value from outside the interview | `inputs:` (`form`), read in a condition |
 | a split-ballot experiment | `if: form = "1"`, `then:` and `else:`, on the bank's two parks questions |
-| select all that apply | `ask: ex.news_sources`, one variable per option |
+| select all that apply | `ask: tpl.news_sources`, one variable per option |
 
 Conditions are written in VTL, the SDMX standard's expression language:
-`ex.service_satisfaction in {"4", "5"}`, `form = "1"`, `ex.library_visits < 25`. Codes
+`tpl.service_satisfaction in {"4", "5"}`, `form = "1"`, `tpl.library_visits < 25`. Codes
 are strings, so they are quoted. QREtools completes questions after `ask:` and names in
 conditions, and lists what is still to fill in or fix as you type.

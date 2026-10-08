@@ -1,9 +1,9 @@
 name: example
 title: Example instrument
-description: A short instrument asking the example bank's questions, to copy or delete.
-universe: ex.all_respondents
+description: A short instrument asking the bank template's questions, to copy or delete.
+universe: tpl.all_respondents
 uses:
-  ex: ../banks/example
+  tpl: JHUCities/qretools-bank-template@v1
 inputs:
   form:
     responses:
@@ -14,23 +14,23 @@ flow:
   - say: Thank you for taking part. This survey takes about five minutes.
   - section: The service
     flow:
-      - ask: ex.service_satisfaction
-      - if: ex.service_satisfaction in {"4", "5"}
+      - ask: tpl.service_satisfaction
+      - if: tpl.service_satisfaction in {"4", "5"}
         then:
-          - ask: ex.service_comments
+          - ask: tpl.service_comments
             universe: Respondents dissatisfied with the service
   - section: Libraries and parks
     flow:
-      - ask: ex.library_visits
+      - ask: tpl.library_visits
         checks:
-          - ensure: ex.library_visits < 25
+          - ensure: tpl.library_visits < 25
             severity: info
-            message: "{{ex.library_visits}} days is most of the month. Is that right?"
+            message: "{{tpl.library_visits}} days is most of the month. Is that right?"
       - if: form = "1"
         then:
-          - ask: ex.parks_spending
+          - ask: tpl.parks_spending
             universe: Respondents on form A
         else:
-          - ask: ex.parks_spending_reversed
+          - ask: tpl.parks_spending_reversed
             universe: Respondents on form B
-  - ask: ex.news_sources
+  - ask: tpl.news_sources
