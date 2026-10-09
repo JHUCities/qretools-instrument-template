@@ -1,8 +1,9 @@
 name: example
 title: Example instrument
-description: A short instrument asking the bank template's questions, to copy or delete.
+description: A short instrument asking a question of its own bank and the bank template's, to copy or delete.
 universe: tpl.all_respondents
 uses:
+  local: ../banks/local
   tpl: JHUCities/qretools-bank-template@v1
 inputs:
   form:
@@ -12,6 +13,9 @@ inputs:
     description: Which half of the response-order experiment, assigned before the interview.
 flow:
   - say: Thank you for taking part. This survey takes about five minutes.
+  - ask: local.consent
+  - stop: local.consent = "2"
+    say: Thank you for your time.
   - section: The service
     flow:
       - ask: tpl.service_satisfaction

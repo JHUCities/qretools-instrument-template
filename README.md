@@ -22,11 +22,11 @@ A question bank on its own, with no instruments, starts from the bank template i
    read without it.
 3. **Set your agency:** in `workspace.yaml`, replace `org.example` with the DDI agency your
    instruments are published under (letters, digits and hyphens, in parts joined by
-   dots, such as `edu.example.survey-lab`).
-4. **Choose your bank:** the example instrument uses the
-   [bank template](https://github.com/JHUCities/qretools-bank-template) at its `v1`
-   tag. Point `uses:` at your own bank instead, in its own repository or in a folder
-   under `banks/` here (see below).
+   dots, such as `edu.example.survey-lab`). Do the same in `banks/local/bank.yaml` for
+   that bank's questions.
+4. **Choose your banks:** the example instrument uses two: `banks/local`, a bank kept in
+   this repository, and the [bank template](https://github.com/JHUCities/qretools-bank-template)
+   at its `v1` tag. Point `uses:` at your own banks instead (see below).
 5. **Open it** in QREtools: sign in and enter the repository as `owner/name`, or
    `owner/name/folder` for a workspace kept in a folder. The version that opens
    instruments is in development and not published yet.
@@ -37,7 +37,7 @@ A question bank on its own, with no instruments, starts from the bank template i
 |---|---|
 | `workspace.yaml` | what the workspace says about itself: the DDI agency its instruments are published under (`agency:`) |
 | `instruments/<name>.yaml` | one instrument each |
-| `banks/<name>/` | optional: a question bank kept here, laid out as the [bank template](https://github.com/JHUCities/qretools-bank-template) is |
+| `banks/<name>/` | a question bank kept here (optional), laid out as the [bank template](https://github.com/JHUCities/qretools-bank-template) is: the example's is `banks/local` |
 
 Instruments and banks are kept apart: never put an instrument inside a bank's folders.
 A bank belongs in its own folder under `banks/`, or in a repository of its own.
@@ -59,7 +59,7 @@ A bank kept in this repository is named by where it is from the instrument's own
 
 ```yaml
 uses:
-  here: ../banks/example
+  local: ../banks/local
 ```
 
 Only a tag is read, never a branch, so the bank's owners decide what version is
@@ -68,11 +68,12 @@ published: they tag it. A private bank's repository needs the QREtools app insta
 
 ## The example
 
-`instruments/example.yaml` asks the bank template's example questions, to copy or delete:
+`instruments/example.yaml` asks a question of its own bank and the bank template's example questions, to copy or delete:
 
 | Shows | Where |
 |---|---|
 | a statement read to the respondent | `say:` |
+| a question from this workspace's own bank, and stopping on its answer | `ask: local.consent`, then `stop:` with a `say:` |
 | sections | `section: The service`, with its own `flow:` |
 | a question asked only of some respondents, with whom it's asked of | `if:` with `then:`, and `universe:` on the step |
 | a check on an answer, with a message naming it | `checks:` with `ensure:`, `severity:` and `message:` |
