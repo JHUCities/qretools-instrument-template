@@ -5,4 +5,4 @@ intent: Whether the respondent agrees to be interviewed, before anything else is
 responses:
   "1": Yes
   "2": No
-instruction: Select one
+instruction: select_one

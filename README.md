@@ -1,87 +1,143 @@
 # A survey workspace for QREtools
 
-Survey instruments, one YAML file each, composed from the questions of a question bank
-and elaborated by QREtools to DDI-Lifecycle 4.0: the flow as control constructs, the
-instrument's own variables, and the bank items it asks.
+Survey questions and their documentation, one YAML file per question, kept in a question
+bank, and the instruments composed from them, one YAML file each. QREtools elaborates
+both to DDI-Lifecycle 4.0.
 
 What QREtools is and how it works: [About QREtools](https://github.com/JHUCities/qretools#readme).
 
 This repository is the template for new workspaces:
-<https://github.com/JHUCities/qretools-instrument-template>. Start one with
-[Use this template](https://github.com/JHUCities/qretools-instrument-template/generate).
-A question bank on its own, with no instruments, starts from the bank template instead:
-[qretools-bank-template](https://github.com/JHUCities/qretools-bank-template).
+<https://github.com/JHUCities/qretools-template>. Start one with
+[Use this template](https://github.com/JHUCities/qretools-template/generate).
+It holds one bank of example questions and no instrument: QREtools writes an example
+instrument for you (New, Example instrument).
 
 ## Set up a new workspace from this template
 
 1. **Create your workspace:** "Use this template" → "Create a new repository". A private
    repository is fine.
-2. **Install the QREtools app** on the new repository if it is private:
+2. **Install the QREtools app** on the new repository:
    <https://github.com/apps/qretools/installations/new> → choose your account or
-   organisation → "Only select repositories" → this one. A public repository can be
-   read without it.
-3. **Set your agency:** in `workspace.yaml`, replace `org.example` with the DDI agency your
-   instruments are published under (letters, digits and hyphens, in parts joined by
-   dots, such as `edu.example.survey-lab`). Do the same in `banks/local/bank.yaml` for
-   that bank's questions.
-4. **Choose your banks:** the example instrument uses two: `banks/local`, a bank kept in
-   this repository, and the [bank template](https://github.com/JHUCities/qretools-bank-template)
-   at its `v1` tag. Point `uses:` at your own banks instead (see below).
-5. **Open it** in QREtools: sign in and enter the repository as `owner/name`, or
-   `owner/name/folder` for a workspace kept in a folder. The version that opens
-   instruments is in development and not published yet.
+   organisation → "Only select repositories" → this one. Without it you can read the
+   workspace in QREtools but not save.
+3. **Protect `main`:** Settings → Rules → Rulesets → New branch ruleset. Target the
+   default branch; turn on "Require a pull request before merging", "Block force
+   pushes" and "Restrict deletions". QREtools saves each author's work to their own
+   branch (`qretools-<login>`); the workspace changes only when a pull request is merged.
+4. **Tidy merged branches:** Settings → General → Pull Requests → "Automatically delete
+   head branches".
+5. **Set your agency:** in `workspace.yaml` and `banks/local/bank.yaml`, replace
+   `org.example` with the DDI agency your items are published under (letters, digits and
+   hyphens, in parts joined by dots, such as `edu.example.survey-lab`). Without one,
+   nothing can be exported as DDI.
+6. **Open it** in QREtools: sign in and enter the repository as `owner/name`. The
+   version that opens workspaces and instruments is in development and not published
+   yet.
 
 ## Layout
 
 | Path | Holds |
 |---|---|
 | `workspace.yaml` | what the workspace says about itself: the DDI agency its instruments are published under (`agency:`) |
-| `instruments/<name>.yaml` | one instrument each |
-| `banks/<name>/` | a question bank kept here (optional), laid out as the [bank template](https://github.com/JHUCities/qretools-bank-template) is: the example's is `banks/local` |
+| `instruments/<name>.yaml` | one instrument each (none yet: QREtools makes the first) |
+| `banks/local/` | the workspace's question bank, laid out as below; rename it, or add more banks beside it |
 
-Instruments and banks are kept apart: never put an instrument inside a bank's folders.
-A bank belongs in its own folder under `banks/`, or in a repository of its own.
+A bank's own layout:
 
-## The banks an instrument uses
+| Path | Holds |
+|---|---|
+| `questions/<folder>/<name>.yaml` | one question each; the folder is chosen when a question is first saved, and says nothing about the question's name |
+| `concepts/<name>.yaml` | shared concepts (`label:`, `definition:`), used by name from `concept:` |
+| `units/<name>.yaml` | shared units (`label:`, `definition:`), used by name from `unit:` under `number:` |
+| `scales/<name>.yaml` | shared response scales (`labels:`), used by name from `responses:` |
+| `universes/<name>.yaml` | shared universes (`text:`), used by name from `universe:` |
+| `instructions/<name>.yaml` | shared instructions (`text:`), used by name from `instruction:` |
+| `missing.yaml` | the bank's missing-value codes (`labels:`) |
+| `bank.yaml` | what the bank says about itself: the DDI agency its items are published under (`agency:`) |
 
-An instrument names each bank it uses under a short alias, and then names the bank's
-questions with it: `ask: tpl.service_satisfaction`. A bank in a repository of its own is
-named by its repository and a tag, so the instrument always reads the same version of it
-until you change the tag:
+`scales/yesno01.yaml` must stay as it is (`0: No`, `1: Yes`): select-all-that-apply
+questions record each option on it. The codes in `missing.yaml` are this template's
+example; use your own conventions. Instruments and banks are kept apart: never put an
+instrument inside a bank's folders.
+
+## Shared values, and keeping the bank free of duplicates
+
+Six things can be written once and named from any question:
+
+| Shared | Named from | Example here |
+|---|---|---|
+| a concept (what is measured) | `concept: service_satisfaction` | `concepts/service_satisfaction.yaml` and three more |
+| a unit | `number: { unit: days }` | `units/days.yaml`, `years.yaml`, `dollars.yaml` |
+| a response scale | `responses: satisfied5` | `scales/satisfied5.yaml`, `support4.yaml`, `support4_reversed.yaml` |
+| a universe | `universe: all_respondents` | `universes/all_respondents.yaml` |
+| an instruction | `instruction: select_one` | `instructions/select_one.yaml`, `select_all.yaml` |
+| the missing-value codes | every question, implicitly | `missing.yaml` |
+
+Concepts and units are always shared: written as words in a question, QREtools offers
+to make them shared. Anything else is written in the question.
+
+QREtools points out repetition as you type:
+
+- the same question text, response list, universe or instruction in two questions, or
+  two shared scales with the same labels (a warning on each, linking to the other);
+- a response list, universe or instruction written out that a shared one already says
+  ("use the name");
+- a question worded much like another (a note, quoting the other).
+
+When two questions are alike on purpose, say so in either of them, with why they
+differ, and the warning goes:
 
 ```yaml
-uses:
-  tpl: JHUCities/qretools-bank-template@v1   # owner/name@tag
-  own: your-org/your-bank/banks/main@v2      # owner/name/folder@tag, for a bank in a folder
+variant_of:
+  parks_spending: response-order experiment, options shown in reverse
 ```
 
-A bank kept in this repository is named by where it is from the instrument's own folder:
+## The example questions
+
+`banks/local/questions/` holds one of each kind of question, to copy or delete:
+
+| Example | Shows |
+|---|---|
+| `interview/consent.yaml` | one answer from an inline list, with a shared instruction |
+| `examples/service_satisfaction.yaml` | one answer from a shared scale, with a shared universe and instruction |
+| `examples/news_sources.yaml` | select all that apply, one variable per option (coded on `yesno01`) |
+| `examples/library_visits.yaml` | a number with a range and a unit |
+| `examples/service_comments.yaml` | an open answer with a length limit |
+| `examples/parks_spending.yaml`, `parks_spending_reversed.yaml` | two questions alike on purpose (`variant_of`), on scales in opposite orders |
+
+Name questions and folders however your team prefers: QREtools reads nothing into
+either.
+
+## Instruments
+
+In QREtools, New → Example instrument writes `instruments/example.yaml`, asking these
+questions: consent and stopping on its answer, sections, a follow-up asked only of some
+respondents, a check on an answer, a value from outside the interview, and a
+split-ballot experiment on the two parks questions. Copy it or delete it.
+
+An instrument names each bank it uses under a short alias, then names the bank's
+questions with it (`ask: bank.consent`). A bank kept in this repository is named by
+where it is from the instrument's own folder:
 
 ```yaml
 uses:
-  local: ../banks/local
+  bank: ../banks/local
+```
+
+A bank in a repository of its own is named by its repository and a tag, so the
+instrument always reads the same version of it until you change the tag:
+
+```yaml
+uses:
+  theirs: your-org/their-bank@v1            # owner/name@tag
+  shared: your-org/workspace/banks/main@v2  # owner/name/folder@tag, for a bank in a folder
 ```
 
 Only a tag is read, never a branch, so the bank's owners decide what version is
 published: they tag it. A private bank's repository needs the QREtools app installed
-(step 2) for the instrument tool to read it.
-
-## The example
-
-`instruments/example.yaml` asks a question of its own bank and the bank template's example questions, to copy or delete:
-
-| Shows | Where |
-|---|---|
-| a statement read to the respondent | `say:` |
-| a question from this workspace's own bank, and stopping on its answer | `ask: local.consent`, then `stop:` with a `say:` |
-| sections | `section: The service`, with its own `flow:` |
-| a question asked only of some respondents, with whom it's asked of | `if:` with `then:`, and `universe:` on the step |
-| a check on an answer, with a message naming it | `checks:` with `ensure:`, `severity:` and `message:` |
-| a value from outside the interview | `inputs:` (`form`), read in a condition |
-| a split-ballot experiment | `if: form = "1"`, `then:` and `else:`, on the bank's two parks questions |
-| select all that apply | `ask: tpl.news_sources`, one variable per option |
+for QREtools to read it. Its questions open on GitHub; a bank kept here opens in place.
 
 Conditions are written in VTL, the SDMX standard's expression language:
-`tpl.service_satisfaction in {"4", "5"}`, `form = "1"`, `tpl.library_visits < 25`. Codes
-are strings, so they are quoted. QREtools completes questions after `ask:` and names in
-conditions, and lists what is still to fill in or fix as you type.
+`bank.service_satisfaction in {"4", "5"}`, `form = "1"`, `bank.library_visits < 25`.
+Codes are strings, so they are quoted. QREtools completes questions after `ask:`, names
+in conditions and codes after `=`, and lists what is still to fill in or fix as you type.
