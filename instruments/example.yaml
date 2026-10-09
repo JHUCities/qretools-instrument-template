@@ -8,8 +8,8 @@ uses:
 inputs:
   form:
     responses:
-      "1": Form A
-      "2": Form B
+      "1": Form 1
+      "2": Form 2
     description: Which half of the response-order experiment, assigned before the interview.
 flow:
   - say: Thank you for taking part. This survey takes about five minutes.
@@ -33,8 +33,8 @@ flow:
       - if: form = "1"
         then:
           - ask: tpl.parks_spending
-            universe: Respondents on form A
+            universe: Respondents on form 1
         else:
           - ask: tpl.parks_spending_reversed
-            universe: Respondents on form B
+            universe: Respondents on form 2
   - ask: tpl.news_sources
