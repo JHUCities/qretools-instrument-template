@@ -3,8 +3,8 @@
 # The DDI agency this bank's questions and shared files are published under:
 # the registered code of the organization that maintains the bank. Every URN
 # they export begins with it, as in urn:ddi:org.example:...
-# Replace org.example with your organization's: letters, digits and hyphens,
-# in parts joined by dots, such as edu.example.dept.
+# Replace org.example with your organization's code: letters, digits and
+# hyphens, in parts joined by dots, such as edu.example.dept.
 agency: org.example
 
 # Fields every question in this bank must have, beyond name, text and intent:
